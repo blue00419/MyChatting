@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "886776284449",
+    "firebase_url": "https://chattingfirst.firebaseio.com",
+    "project_id": "chattingfirst",
+    "storage_bucket": "chattingfirst.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886776284449:android:0618d29fe16d30d6b32a60",
+        "android_client_info": {
+          "package_name": "kr.ac.s20140238kumoh.mychatting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "886776284449-vrnl1hsd131a9asd09g31o035be0262g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTpZW2MgnWVe6y98ge-zU_rGd7TUYD9YQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "886776284449-vrnl1hsd131a9asd09g31o035be0262g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
