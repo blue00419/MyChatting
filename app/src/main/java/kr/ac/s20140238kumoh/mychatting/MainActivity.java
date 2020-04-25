@@ -1,110 +1,140 @@
 package kr.ac.s20140238kumoh.mychatting;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView mRecyclerVeiw;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private List<ChatData> chatList;
-    private String nick = "nick2";
+    private Button Button_login;
+    private Button Button_register;
+    private EditText EditText_email;
+    private EditText EditText_id;
+    private EditText EditText_pw;
 
-    private EditText EditText_chat;
-    private Button Button_send;
-    private
     DatabaseReference myRef;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button_send = findViewById(R.id.Button_send);
-        EditText_chat = findViewById(R.id.EditText_chat);
+        Button_login = findViewById(R.id.Button_login);
+        Button_register = findViewById(R.id.Button_register);
+        EditText_email = findViewById(R.id.EditText_email);
+        EditText_id = findViewById(R.id.EditText_id);
+        EditText_pw = findViewById(R.id.EditText_pw);
 
-        Button_send.setOnClickListener(new View.OnClickListener() {
+        auth = FirebaseAuth.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        Button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String msg = EditText_chat.getText().toString();
-                EditText_chat.setText("");
-                if(msg != null){
-                    ChatData chat = new ChatData();
-                    chat.setNickname(nick);
-                    chat.setMsg(msg);
-                    myRef.push().setValue(chat);
+                final String email = EditText_email.getText().toString();
+                final String pw = EditText_pw.getText().toString();
+
+                signIn(email, pw);
+
+                FirebaseUser user = auth.getCurrentUser();
+
+                String name = user.getDisplayName();
+                String email1 = user.getEmail();
+                String uid1 = user.getUid();
+                Log.d("CHATCHAT", name + ", "  + email1 + ", " + uid1);
+            }
+        });
+
+        Button_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String email = EditText_email.getText().toString();
+                final String id = EditText_id.getText().toString();
+                final String pw = EditText_pw.getText().toString();
+                if(email != null && id != null && pw != null){
+                    if(pw.length() >= 6){
+                        signUp(email, id, pw);
+                    }
+                    else{
+                        EditText_pw.setText("");
+                        Toast.makeText(getApplicationContext(), "pw가 짧습니다.", Toast.LENGTH_LONG).show();
+                    }
+                }
+                else if(email != null){
+                    Toast.makeText(getApplicationContext(), "email를 입력하세요.", Toast.LENGTH_LONG).show();
+                }
+                else if(id != null){
+                    Toast.makeText(getApplicationContext(), "id를 입력하세요.", Toast.LENGTH_LONG).show();
+                }
+                else if(pw != null){
+                    Toast.makeText(getApplicationContext(), "pw를 입력하세요.", Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
 
+    private void signIn(String email, String pw){
+        auth.signInWithEmailAndPassword(email, pw)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                    }
+                });
+    }
 
+    private void signUp(final String email, final String id, final String pw){
+        auth.createUserWithEmailAndPassword(email, pw)
+                .addOnCompleteListener
+                        (this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()){
 
-        mRecyclerVeiw = findViewById(R.id.my_recycler_view);
-        mRecyclerVeiw.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerVeiw.setLayoutManager(mLayoutManager);
+                                    final String uid = task.getResult().getUser().getUid();
+                                    UserModel userModel = new UserModel();
 
+                                    userModel.displayName = id;
+                                    userModel.uid = uid;
+                                    userModel.pw = pw;
+                                    userModel.email = email;
 
-        chatList = new ArrayList<>();
+                                    myRef.setValue(userModel);
+                                }
+                                else{
+                                    EditText_email.setText("");
+                                    EditText_id.setText("");
+                                    EditText_pw.setText("");
+                                }
+                            }
+                        });
+    }
 
-        mAdapter = new ChatAdapter(chatList, MainActivity.this, nick);
-        mRecyclerVeiw.setAdapter(mAdapter);
-
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        myRef = database.getReference();
-
-//        ChatData chat = new ChatData();
-//        chat.setNickname(nick);
-//        chat.setMsg("hi");
-//        myRef.setValue(chat);
-
-        myRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.d("CHATCHAT", dataSnapshot.getValue().toString());
-                ChatData chat = dataSnapshot.getValue(ChatData.class);
-                ((ChatAdapter) mAdapter).addChat(chat);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+    private void signOut(){
+        auth.signOut();
+        FirebaseUser user = null;
+        auth.updateCurrentUser(user);
     }
 }

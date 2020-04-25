@@ -1,46 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="1"
-    tools:context=".MainActivity">
+    android:layout_gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/my_recycler_view"
-        android:scrollbars="vertical"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
+    <TextView
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/TextView_email"
+        android:text="email : "
+        android:textSize="23dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="220dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/EditText_email"
+        app:layout_constraintBottom_toTopOf="@id/TextView_id"
+        />
 
-    </androidx.recyclerview.widget.RecyclerView>
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/EditText_email"
+        android:hint="email를 입력하세요"
+        android:layout_marginEnd="70dp"
+        app:layout_constraintStart_toEndOf="@id/TextView_email"
+        app:layout_constraintTop_toTopOf="@id/TextView_email"
+        app:layout_constraintBottom_toBottomOf="@id/TextView_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:orientation="horizontal"
-        android:weightSum="1"
-        >
+    <TextView
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/TextView_id"
+        android:text="id : "
+        android:textSize="23dp"
+        android:layout_marginStart="70dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TextView_email"
+        app:layout_constraintEnd_toStartOf="@id/EditText_id"
+        app:layout_constraintBottom_toTopOf="@id/TextView_pw"
+        />
 
-        <EditText
-            android:id="@+id/EditText_chat"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/EditText_id"
+        android:hint="id를 입력하세요"
+        android:layout_marginEnd="70dp"
+        app:layout_constraintStart_toEndOf="@id/TextView_id"
+        app:layout_constraintTop_toTopOf="@id/TextView_id"
+        app:layout_constraintBottom_toBottomOf="@id/TextView_id"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
-            />
+    <TextView
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/TextView_pw"
+        android:text="pw : "
+        android:textSize="23dp"
+        android:layout_marginStart="70dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TextView_id"
+        app:layout_constraintEnd_toStartOf="@id/EditText_pw"
+        app:layout_constraintBottom_toTopOf="@id/Button_login"
+        />
 
-        <Button
-            android:id="@+id/Button_send"
-            android:text="send"
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/EditText_pw"
+        android:hint="pw는 6자리이상"
+        android:layout_marginEnd="70dp"
+        app:layout_constraintStart_toEndOf="@id/TextView_pw"
+        app:layout_constraintTop_toTopOf="@id/TextView_pw"
+        app:layout_constraintBottom_toBottomOf="@id/TextView_pw"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
-            />
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/Button_login"
+        android:textSize="30dp"
+        android:text="로그인"
+        android:layout_marginStart="60dp"
+        android:layout_marginBottom="220dp"
+        app:layout_constraintTop_toBottomOf="@id/TextView_pw"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/Button_register"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
-    </LinearLayout>
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/Button_register"
+        android:textSize="30dp"
+        android:text="회원가입"
+        android:layout_marginEnd="60dp"
+        app:layout_constraintTop_toTopOf="@id/Button_login"
+        app:layout_constraintStart_toEndOf="@id/Button_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/Button_login"
+        />
 
-</LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
