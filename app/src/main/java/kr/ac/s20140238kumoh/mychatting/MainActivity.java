@@ -28,6 +28,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int chat = 1000;
+
     private Button Button_login;
     private Button Button_register;
     private EditText EditText_email;
@@ -49,22 +51,25 @@ public class MainActivity extends AppCompatActivity {
         EditText_pw = findViewById(R.id.EditText_pw);
 
         auth = FirebaseAuth.getInstance();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        myRef = FirebaseDatabase.getInstance().getReference();
+        //FirebaseDatabase database = FirebaseDatabase.getInstance();
 
         Button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String email = EditText_email.getText().toString();
+                final String id = EditText_id.getText().toString();
                 final String pw = EditText_pw.getText().toString();
 
                 signIn(email, pw);
 
-                FirebaseUser user = auth.getCurrentUser();
-
-                String name = user.getDisplayName();
-                String email1 = user.getEmail();
-                String uid1 = user.getUid();
-                Log.d("CHATCHAT", name + ", "  + email1 + ", " + uid1);
+                SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("name", id);
+                editor.putString("email", email);
+                editor.commit();
+                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -113,15 +118,17 @@ public class MainActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
 
-                                    final String uid = task.getResult().getUser().getUid();
-                                    UserModel userModel = new UserModel();
+//                                    final String uid = task.getResult().getUser().getUid();
+//                                    UserModel userModel = new UserModel();
+//
+//                                    userModel.displayName = id;
+//                                    userModel.uid = uid;
+//                                    userModel.pw = pw;
+//                                    userModel.email = email;
+//
+//                                    myRef.setValue(userModel);
 
-                                    userModel.displayName = id;
-                                    userModel.uid = uid;
-                                    userModel.pw = pw;
-                                    userModel.email = email;
-
-                                    myRef.setValue(userModel);
+                                    Toast.makeText(getApplicationContext(),"회원가입 완료", Toast.LENGTH_LONG).show();
                                 }
                                 else{
                                     EditText_email.setText("");
