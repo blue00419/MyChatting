@@ -1,4 +1,4 @@
-package kr.ac.s20140238kumoh.mychatting;
+package kr.ac.s20140238kumoh.mychatting.data;
 
 public class ChatData {
     private String msg;

@@ -1,4 +1,4 @@
-package kr.ac.s20140238kumoh.mychatting;
+package kr.ac.s20140238kumoh.mychatting.chat;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,6 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import kr.ac.s20140238kumoh.mychatting.data.ChatData;
+import kr.ac.s20140238kumoh.mychatting.R;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -32,7 +36,10 @@ public class ChatActivity extends AppCompatActivity {
 
     private EditText EditText_chat;
     private Button Button_send;
+
     DatabaseReference myRef;
+    FirebaseAuth auth;
+    FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,23 @@ public class ChatActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("user",MODE_PRIVATE);
         nick = sharedPreferences.getString("name", "user");
+
+        auth = FirebaseAuth.getInstance();
+
+        mRecyclerVeiw = findViewById(R.id.my_recycler_view);
+        mRecyclerVeiw.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerVeiw.setLayoutManager(mLayoutManager);
+
+
+        chatList = new ArrayList<>();
+
+        mAdapter = new ChatAdapter(chatList, ChatActivity.this, nick);
+        mRecyclerVeiw.setAdapter(mAdapter);
+
+
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("message");
 
 
 
@@ -56,38 +80,19 @@ public class ChatActivity extends AppCompatActivity {
                     ChatData chat = new ChatData();
                     chat.setNickname(nick);
                     chat.setMsg(msg);
+                    //myRef.push().setValue(chat);
+                    myRef = database.getReference(nick);
                     myRef.push().setValue(chat);
                 }
             }
         });
-
-
-
-        mRecyclerVeiw = findViewById(R.id.my_recycler_view);
-        mRecyclerVeiw.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerVeiw.setLayoutManager(mLayoutManager);
-
-
-        chatList = new ArrayList<>();
-
-        mAdapter = new ChatAdapter(chatList, ChatActivity.this, nick);
-        mRecyclerVeiw.setAdapter(mAdapter);
-
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("message");
-
-//        ChatData chat = new ChatData();
-//        chat.setNickname(nick);
-//        chat.setMsg("hi");
-//        myRef.setValue(chat);
 
         myRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Log.d("CHATCHAT", dataSnapshot.getValue().toString());
                 ChatData chat = dataSnapshot.getValue(ChatData.class);
+                Log.d("CHATCHAT", chat.getMsg());
                 ((ChatAdapter) mAdapter).addChat(chat);
             }
 

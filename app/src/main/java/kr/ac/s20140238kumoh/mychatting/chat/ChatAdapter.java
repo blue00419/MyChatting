@@ -1,4 +1,4 @@
-package kr.ac.s20140238kumoh.mychatting;
+package kr.ac.s20140238kumoh.mychatting.chat;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import kr.ac.s20140238kumoh.mychatting.data.ChatData;
+import kr.ac.s20140238kumoh.mychatting.R;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> {
 
@@ -68,6 +71,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     }
 
     public ChatData getChat(int position){
+
         return mDataset != null ? mDataset.get(position) : null;
     }
 
