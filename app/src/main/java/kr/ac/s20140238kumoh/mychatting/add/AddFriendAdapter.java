@@ -1,4 +1,4 @@
-package kr.ac.s20140238kumoh.mychatting.list;
+package kr.ac.s20140238kumoh.mychatting.add;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,10 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import kr.ac.s20140238kumoh.mychatting.R;
-import kr.ac.s20140238kumoh.mychatting.data.UserData;
 
 public class AddFriendAdapter extends RecyclerView.Adapter<AddFriendAdapter.MyViewHolder>
-implements AddFriendClickListener{
+implements AddFriendClickListener {
 
     private List<String> userList;
     AddFriendClickListener listener;
@@ -31,7 +30,7 @@ implements AddFriendClickListener{
         }
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder{
 
         public TextView TextView_name;
         public View rootView;

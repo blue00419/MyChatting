@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         EditText_email = findViewById(R.id.EditText_email);
         EditText_pw = findViewById(R.id.EditText_pw);
 
+        setTitle("로그인");
+
         userList = new ArrayList<>();
 
         auth = FirebaseAuth.getInstance();

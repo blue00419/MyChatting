@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +34,9 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private List<ChatData> chatList;
     private String nick = "nick2";
+    private String roomname;
+    private String roomdb;
+    private String roomkey;
 
     private EditText EditText_chat;
     private Button Button_send;
@@ -45,6 +49,14 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_activity);
+
+        Intent intent = getIntent();
+        roomname = intent.getExtras().getString("user");
+        roomdb = intent.getExtras().getString("room");
+        roomkey = intent.getExtras().getString("roomkey");
+
+        setTitle(roomname + "님과의 대화");
+
 
         SharedPreferences sharedPreferences = getSharedPreferences("user",MODE_PRIVATE);
         nick = sharedPreferences.getString("name", "user");
@@ -64,7 +76,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
         database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("message");
+        myRef = database.getReference("message/" + roomkey + "/" + roomdb);
 
 
 
@@ -81,7 +93,7 @@ public class ChatActivity extends AppCompatActivity {
                     chat.setNickname(nick);
                     chat.setMsg(msg);
                     //myRef.push().setValue(chat);
-                    myRef = database.getReference(nick);
+                    //myRef = database.getReference(nick);
                     myRef.push().setValue(chat);
                 }
             }

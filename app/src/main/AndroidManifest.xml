@@ -21,7 +21,7 @@
         <activity android:name=".login.RegisterActivity"/>
         <activity android:name=".chat.ChatActivity"/>
         <activity android:name=".list.ChatListActivity"/>
-        <activity android:name=".list.AddFriendActivity"/>
+        <activity android:name=".add.AddFriendActivity"/>
 
     </application>
 

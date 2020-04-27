@@ -1,4 +1,4 @@
-package kr.ac.s20140238kumoh.mychatting.list;
+package kr.ac.s20140238kumoh.mychatting.add;
 
 import android.view.View;
 

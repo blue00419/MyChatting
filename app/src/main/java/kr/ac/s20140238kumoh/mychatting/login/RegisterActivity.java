@@ -39,6 +39,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_activity);
 
+        setTitle("회원가입");
+
         Intent intent = getIntent();
         List<UserData> a = (List<UserData>) intent.getSerializableExtra("List");
 
